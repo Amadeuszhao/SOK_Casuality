@@ -132,11 +132,6 @@ Contributions are welcome! Areas of interest:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🔗 Resources
-
-- **Paper**: [SoK_s_p.pdf](./SOK_s_p.pdf)
-- **Framework Documentation**: [Coming Soon]
-- **Benchmark Datasets**: See `datas/` directory
 
 ## ⚠️ Responsible Use
 
