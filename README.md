@@ -4,7 +4,7 @@ A comprehensive framework for multi-level causality analysis in Large Language M
 
 ## 📋 Overview
 
-This framework implements the causality analysis methods described in "SoK: a Comprehensive Causality Analysis Framework for Large Language Model Security". It provides tools for:
+This framework implements the causality analysis methods described in "[SoK: a Comprehensive Causality Analysis Framework for Large Language Model Security](https://arxiv.org/abs/2512.04841)". It provides tools for:
 
 - **Multi-level Causality Analysis**: Systematic interventions at token, neuron, layer, and representation levels
 - **Misbehavior Detection**: Detection of jailbreaks, hallucinations, backdoors, and fairness violations using causal features
@@ -22,7 +22,11 @@ This framework implements the causality analysis methods described in "SoK: a Co
 │   └── token/          # Token-level features
 ├── casper/             # Core causality analysis engine
 ├── utils/              # Utility functions and helpers
-└── results/            # Detection results and evaluation metrics
+├── results/            # Detection results and evaluation metrics
+├── experiment_with_layer.ipynb    # Layer-level causality experiments
+├── experiment_with_neuron.ipynb   # Neuron-level causality experiments
+├── experiment_with_rep.ipynb      # Representation-level experiments
+└── experiment_with_token.ipynb    # Token-level causality experiments
 ```
 
 ## 🔬 Causality Analysis & Experimental Findings
@@ -37,6 +41,11 @@ Examines how individual input tokens causally affect model outputs through syste
 - AutoDAN attacks: Lower ACE (max 0.15), semantically distributed
 - **Intervention Efficacy**: ASR reduced from 100% → 24.2-30.4% for GCG by removing single tokens
 
+**Experimentation** (`experiment_with_token.ipynb`):
+- Test different types of adversarial prompts (GCG, AutoDAN, PAIR, AmpleGCG)
+- Analyze token-level causal patterns across various jailbreak strategies
+- Compare trigger token effectiveness between optimization-based and LLM-based attacks
+
 ### 2. Neuron-Level Analysis
 Identifies sparse, causally critical neurons that modulate safety behavior using logistic regression and z-score analysis.
 
@@ -46,6 +55,12 @@ Identifies sparse, causally critical neurons that modulate safety behavior using
 - Only 0.88-1.88% of neurons per layer are safety-critical
 - High cross-model transferability
 - **Intervention Efficacy**: ASR increased from 0% → 46.8-57.8% on harmful prompts by deactivating safety neurons
+
+**Experimentation** (`experiment_with_neuron.ipynb`):
+- **Customize training datasets**: Use different benign and harmful datasets to train neuron classifiers
+- **Locate toxic neurons**: Identify safety-critical neurons through z-score analysis (|z| > 2.5)
+- **Cross-dataset validation**: Test neuron transferability across different prompt distributions
+- **Layer-wise analysis**: Examine neuron sparsity patterns across transformer layers
 
 ### 3. Layer-Level Analysis
 Traces how causal influence propagates through transformer layers to shape safety decisions.
@@ -58,6 +73,12 @@ Traces how causal influence propagates through transformer layers to shape safet
 - Negligible effects after Layer 13
 - **Intervention Efficacy**: ASR increased from 0% → 91.4-92.8% by removing critical layers
 
+**Experimentation** (`experiment_with_layer.ipynb`):
+- **Switch harmful prompts**: Experiment with different harmful prompt sets to identify safety-critical layers
+- **Discover layer patterns**: Analyze how layer importance varies across different threat models
+- **Validate layer localization**: Confirm whether safety discriminators consistently appear in early layers
+- **Cross-prompt consistency**: Test layer causality stability across diverse harmful content
+
 ### 4. Representation-Level Analysis
 Explores how embedding geometry encodes safety boundaries through directional interventions.
 
@@ -67,6 +88,13 @@ Explores how embedding geometry encodes safety boundaries through directional in
 - Clear geometric separation between harmful/benign clusters in representation space
 - Safety alignment operates through geometrically separable structures
 - **Intervention Efficacy**: ASR increased from 0% → 92.8-96.0% (highest efficacy across all levels)
+
+**Experimentation** (`experiment_with_rep.ipynb`):
+- **Customize datasets**: Use different benign and harmful datasets to compute direction vectors
+- **Control intervention layers**: Specify which layers to apply directional steering
+- **Adjust steering strength**: Modify the magnitude of directional perturbations (alpha parameter)
+- **Visualize decision boundaries**: Use PCA to analyze representation space geometry
+- **Multi-layer steering**: Experiment with layer-specific or uniform steering across the model
 
 ## 🎯 Detection Tasks & Performance
 
@@ -121,6 +149,39 @@ pip install -r requirements.txt
 - Qwen2.5-7B
 - LLaMA3.1-8B
 
+### Running Experiments
+
+Each Jupyter notebook provides interactive experimentation for different causality analysis levels:
+
+#### Token-Level Experiments
+```bash
+jupyter notebook experiment_with_token.ipynb
+```
+- Experiment with different adversarial prompt types
+- Analyze causal token patterns across attack methods
+
+#### Layer-Level Experiments
+```bash
+jupyter notebook experiment_with_layer.ipynb
+```
+- Switch between different harmful prompt sets
+- Identify safety-critical layers for various threat models
+
+#### Neuron-Level Experiments
+```bash
+jupyter notebook experiment_with_neuron.ipynb
+```
+- Customize benign/harmful training datasets
+- Locate and analyze toxic neurons across layers
+
+#### Representation-Level Experiments
+```bash
+jupyter notebook experiment_with_rep.ipynb
+```
+- Configure benign/harmful datasets for direction computation
+- Control intervention layers and steering strength
+- Visualize representation space geometry
+
 ## 🤝 Contributing
 
 Contributions are welcome! Areas of interest:
@@ -132,7 +193,6 @@ Contributions are welcome! Areas of interest:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-
 ## ⚠️ Responsible Use
 
 This framework is designed for research purposes to improve LLM safety. Users should:
@@ -140,3 +200,6 @@ This framework is designed for research purposes to improve LLM safety. Users sh
 - Follow responsible disclosure practices for discovered vulnerabilities
 - Use detection capabilities to enhance model safety, not to facilitate attacks
 
+---
+
+**Status**: Under Active Development | **Last Updated**: December 2025
